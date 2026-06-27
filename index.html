@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Seu Coração Será Partido</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d0015;
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 120px;
+        }
+
+        /* ── POSTER ── */
+        .poster {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+            max-height: 55vw;
+        }
+
+        /* ── CONTEÚDO ── */
+        .content {
+            padding: 20px 18px 0;
+        }
+
+        .title-block {
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .heart-icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 10px;
+            animation: pulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50%       { transform: scale(1.12); }
+        }
+
+        .title-block h1 {
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 1.35;
+            color: #fff;
+        }
+
+        .title-block h1 em {
+            color: #f472b6;
+            font-style: italic;
+        }
+
+        .title-block p {
+            font-size: 13px;
+            color: #c084fc;
+            margin-top: 6px;
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: rgba(255,255,255,0.055);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 14px;
+        }
+
+        .card p {
+            font-size: 14px;
+            line-height: 1.65;
+            color: #e9d5ff;
+        }
+
+        .card p strong {
+            color: #f0abfc;
+        }
+
+        /* ── FEATURES ── */
+        .features { list-style: none; margin-top: 12px; }
+        .features li {
+            font-size: 14px;
+            color: #e9d5ff;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .features li:last-child { border-bottom: none; }
+
+        /* ── CTA CARD ── */
+        .cta-card {
+            background: rgba(244, 114, 182, 0.1);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .cta-card .label {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f472b6;
+        }
+
+        .cta-card p {
+            font-size: 13px;
+            color: #e9d5ff;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        /* ── CAMPANHA IMAGE ── */
+        .campanha-img {
+            width: 100%;
+            border-radius: 14px;
+            display: block;
+            margin-bottom: 14px;
+            border: 1px solid rgba(244,114,182,0.2);
+        }
+
+        /* ── FOOTER TEXT ── */
+        .footer-text {
+            text-align: center;
+            font-size: 13px;
+            color: #a78bfa;
+            padding: 0 10px;
+            line-height: 1.6;
+            margin-bottom: 6px;
+        }
+
+        /* ── BOTÃO FIXO ── */
+        .btn-wrapper {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 14px 18px;
+            background: linear-gradient(to top, #0d0015 70%, transparent);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 17px;
+            background: linear-gradient(135deg, #9333ea, #ec4899);
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            transition: opacity 0.15s, transform 0.1s;
+            box-shadow: 0 4px 24px rgba(236,72,153,0.35);
+        }
+
+        .btn:active {
+            opacity: 0.85;
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pôster do filme -->
+    <img class="poster" src="poster.png" alt="Seu Coração Será Partido">
+
+    <div class="content">
+
+        <div class="title-block">
+            <span class="heart-icon">❤️</span>
+            <h1>Bem-vindo ao projeto de dublagem de<br><em>Seu Coração Será Partido</em></h1>
+            <p>Um projeto de amor ao cinema russo ✨</p>
+        </div>
+
+        <div class="card">
+            <p>
+                Este é um filme — uma adaptação do aclamado romance <em>young adult</em> da autora russa
+                <strong>Anna Jane</strong>, produzido para emocionar e contar uma história inesquecível.
+                Com muito esforço, conseguimos <strong>legendar em português</strong> com uma qualidade de imagem excelente.
+            </p>
+            <p style="margin-top: 12px;">
+                Agora queremos dar um novo passo: produzir uma <strong>dublagem profissional</strong>,
+                preservando toda a emoção, intensidade e personalidade de cada personagem.
+            </p>
+        </div>
+
+        <!-- Imagem da campanha -->
+        <img class="campanha-img" src="campanha.png" alt="Campanha de Apoio">
+
+        <div class="card">
+            <p style="font-weight: 600; margin-bottom: 4px;">Para tornar isso possível, estamos arrecadando contribuições para:</p>
+            <ul class="features">
+                <li>🎙️ Tradução profissional do roteiro</li>
+                <li>🎭 Adaptação dos diálogos</li>
+                <li>🎤 Dublagem com vozes profissionais</li>
+                <li>🎬 Direção de dublagem</li>
+                <li>🎧 Mixagem, edição e finalização de áudio</li>
+            </ul>
+        </div>
+
+        <div class="cta-card">
+            <span class="label">Contribua a partir de R$ 5,00 ❤️</span>
+            <p>
+                Ao contribuir com qualquer valor, você recebe
+                <strong>acesso ao canal exclusivo</strong> onde poderá assistir ao filme completo em
+                <strong>alta qualidade e legendado em português</strong>.
+            </p>
+        </div>
+
+        <p class="footer-text">
+            ❤️ Cada contribuição nos aproxima da realização desse sonho.<br>
+            Muito obrigado por acreditar neste projeto e fazer parte dessa história.
+        </p>
+
+    </div>
+
+    <!-- Botão fixo -->
+    <div class="btn-wrapper">
+        <button class="btn" onclick="assistir()">🎬 Assistir ao Filme</button>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        function assistir() {
+            tg.sendData('assistir');
+        }
+    </script>
+</body>
+</html>
