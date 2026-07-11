@@ -1,0 +1,41 @@
+# Bot files (não fazer upload)
+bot.py
+database.py
+config.py
+horsepay_payments.py
+requirements.txt
+bot_log.txt
+prompt do bot e pagina.txt
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+venv/
+env/
+
+# Videos grandes (não fazer upload)
+*.mp4
+
+# Logs
+*.log
