@@ -3,148 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>Seu Coração Será Partido</title>
+    <title>IloveDramax - Catálogo de Filmes</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0d0015;
+            background: linear-gradient(135deg, #0d0015 0%, #1a0525 100%);
             color: #fff;
             min-height: 100vh;
-            padding-bottom: 120px;
+            padding: 0 0 100px;
         }
 
-        /* ── POSTER ── */
-        .poster {
-            width: 100%;
+        /* ── HEADER PRINCIPAL ── */
+        .main-header {
+            background: linear-gradient(135deg, rgba(147,51,234,0.2), rgba(236,72,153,0.2));
+            padding: 30px 20px 25px;
+            text-align: center;
+            border-bottom: 2px solid rgba(244, 114, 182, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(244,114,182,0.1) 0%, transparent 70%);
+            animation: pulse-bg 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-bg {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .logo {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-icon {
+            font-size: 48px;
             display: block;
-            object-fit: cover;
-            max-height: 55vw;
+            margin-bottom: 12px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .logo h1 {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f472b6, #c084fc, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .logo p {
+            font-size: 14px;
+            color: #e9d5ff;
+            font-weight: 500;
         }
 
         /* ── CONTEÚDO ── */
         .content {
-            padding: 20px 18px 0;
+            padding: 25px 16px;
         }
 
-        .title-block {
-            text-align: center;
-            margin-bottom: 22px;
-        }
-
-        .heart-icon {
-            font-size: 36px;
-            display: block;
-            margin-bottom: 10px;
-            animation: pulse 1.8s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50%       { transform: scale(1.12); }
-        }
-
-        .title-block h1 {
-            font-size: 19px;
-            font-weight: 700;
-            line-height: 1.35;
-            color: #fff;
-        }
-
-        .title-block h1 em {
-            color: #f472b6;
-            font-style: italic;
-        }
-
-        .title-block p {
-            font-size: 13px;
-            color: #c084fc;
-            margin-top: 6px;
-        }
-
-        /* ── CARDS ── */
-        .card {
-            background: rgba(255,255,255,0.055);
-            border: 1px solid rgba(255,255,255,0.09);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 14px;
-        }
-
-        .card p {
-            font-size: 14px;
-            line-height: 1.65;
-            color: #e9d5ff;
-        }
-
-        .card p strong {
-            color: #f0abfc;
-        }
-
-        /* ── FEATURES ── */
-        .features { list-style: none; margin-top: 12px; }
-        .features li {
-            font-size: 14px;
-            color: #e9d5ff;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .features li:last-child { border-bottom: none; }
-
-        /* ── CTA CARD ── */
-        .cta-card {
-            background: rgba(244, 114, 182, 0.1);
-            border: 1px solid rgba(244, 114, 182, 0.3);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 14px;
-            text-align: center;
-        }
-
-        .cta-card .label {
-            font-size: 16px;
+        .section-title {
+            font-size: 20px;
             font-weight: 700;
             color: #f472b6;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .cta-card p {
-            font-size: 13px;
-            color: #e9d5ff;
-            margin-top: 8px;
-            line-height: 1.6;
+        .section-title::before {
+            content: "";
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #f472b6, #c084fc);
+            border-radius: 2px;
         }
 
-        /* ── CAMPANHA IMAGE ── */
-        .campanha-img {
+        /* ── FILME PRINCIPAL ── */
+        .filme-destaque {
+            background: linear-gradient(135deg, rgba(244,114,182,0.15), rgba(192,132,252,0.15));
+            border: 2px solid rgba(244, 114, 182, 0.4);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filme-destaque::before {
+            content: "⭐ EM DESTAQUE";
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #f472b6, #ec4899);
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .filme-destaque .poster {
             width: 100%;
-            border-radius: 14px;
-            display: block;
-            margin-bottom: 14px;
-            border: 1px solid rgba(244,114,182,0.2);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3);
         }
 
-        /* ── FOOTER TEXT ── */
-        .footer-text {
-            text-align: center;
-            font-size: 13px;
-            color: #a78bfa;
-            padding: 0 10px;
+        .filme-destaque h2 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #f472b6;
+        }
+
+        .filme-destaque p {
+            font-size: 15px;
+            color: #e9d5ff;
             line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        /* ── GRID DE FILMES ── */
+        .filmes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .filme-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .filme-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(244, 114, 182, 0.5);
+            box-shadow: 0 8px 24px rgba(236, 72, 153, 0.3);
+        }
+
+        .filme-card:active {
+            transform: scale(0.97);
+        }
+
+        .filme-card .poster {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            display: block;
+        }
+
+        .filme-card .info {
+            padding: 14px;
+        }
+
+        .filme-card .info h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
             margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        /* ── BOTÃO FIXO ── */
-        .btn-wrapper {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 14px 18px;
-            background: linear-gradient(to top, #0d0015 70%, transparent);
+        .filme-card .info p {
+            font-size: 12px;
+            color: #c084fc;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
+        /* ── BOTÃO ── */
         .btn {
             display: block;
             width: 100%;
@@ -156,84 +215,100 @@
             font-size: 17px;
             font-weight: 700;
             cursor: pointer;
-            letter-spacing: 0.3px;
-            transition: opacity 0.15s, transform 0.1s;
-            box-shadow: 0 4px 24px rgba(236,72,153,0.35);
+            transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(236, 72, 153, 0.4);
+            margin-top: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(236, 72, 153, 0.5);
         }
 
         .btn:active {
-            opacity: 0.85;
             transform: scale(0.98);
+        }
+
+        /* ── LOADING ── */
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+            color: #c084fc;
+        }
+
+        .loading::before {
+            content: "🎬";
+            display: block;
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.7; }
+        }
+
+        .loading p {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* ── EMPTY ── */
+        .empty {
+            text-align: center;
+            padding: 80px 20px;
+            color: #a78bfa;
+        }
+
+        .empty::before {
+            content: "📭";
+            display: block;
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty p {
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #a78bfa;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .footer a {
+            color: #f472b6;
+            text-decoration: none;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
-
-    <!-- Pôster do filme -->
-    <img class="poster" src="poster.png" alt="Seu Coração Será Partido">
-
-    <div class="content">
-
-        <div class="title-block">
-            <span class="heart-icon">❤️</span>
-            <h1>Bem-vindo ao projeto de dublagem de<br><em>Seu Coração Será Partido</em></h1>
-            <p>Um projeto de amor ao cinema russo ✨</p>
+    <div class="main-header">
+        <div class="logo">
+            <span class="logo-icon">🎬</span>
+            <h1>IloveDramax</h1>
+            <p>Seu catálogo de filmes românticos</p>
         </div>
-
-        <div class="card">
-            <p>
-                Este é um filme — uma adaptação do aclamado romance <em>young adult</em> da autora russa
-                <strong>Anna Jane</strong>, produzido para emocionar e contar uma história inesquecível.
-                Com muito esforço, conseguimos <strong>legendar em português</strong> com uma qualidade de imagem excelente.
-            </p>
-            <p style="margin-top: 12px;">
-                Agora queremos dar um novo passo: produzir uma <strong>dublagem profissional</strong>,
-                preservando toda a emoção, intensidade e personalidade de cada personagem.
-            </p>
-        </div>
-
-        <!-- Imagem da campanha -->
-        <img class="campanha-img" src="campanha.png" alt="Campanha de Apoio">
-
-        <div class="card">
-            <p style="font-weight: 600; margin-bottom: 4px;">Para tornar isso possível, estamos arrecadando contribuições para:</p>
-            <ul class="features">
-                <li>🎙️ Tradução profissional do roteiro</li>
-                <li>🎭 Adaptação dos diálogos</li>
-                <li>🎤 Dublagem com vozes profissionais</li>
-                <li>🎬 Direção de dublagem</li>
-                <li>🎧 Mixagem, edição e finalização de áudio</li>
-            </ul>
-        </div>
-
-        <div class="cta-card">
-            <span class="label">🎬 O filme é gratuito!</span>
-            <p>
-                Basta clicar em <strong>"Assistir ao Filme"</strong> abaixo para ter
-                <strong>acesso imediato ao canal exclusivo</strong> e assistir ao filme completo em
-                <strong>alta qualidade e legendado em português</strong>.
-            </p>
-        </div>
-
-        <div class="card">
-            <p style="font-weight: 600; margin-bottom: 4px;">❤️ Apoie a dublagem (opcional)</p>
-            <p>
-                Se este projeto tocou seu coração, você pode contribuir com qualquer valor a partir de
-                <strong>R$ 5,00</strong> para ajudar a custear a dublagem profissional.
-                Toda ajuda é bem-vinda, mas o acesso ao filme não depende disso.
-            </p>
-        </div>
-
-        <p class="footer-text">
-            ❤️ Cada contribuição nos aproxima da realização desse sonho.<br>
-            Muito obrigado por acreditar neste projeto e fazer parte dessa história.
-        </p>
-
     </div>
 
-    <!-- Botão fixo -->
-    <div class="btn-wrapper">
-        <button class="btn" onclick="assistir()">🎬 Assistir ao Filme</button>
+    <div class="content">
+        <div id="catalogo-container">
+            <div class="loading">
+                <p>Carregando catálogo...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Feito com ❤️ por <a href="https://t.me/DrBuscaOfc">IloveDramax</a>
     </div>
 
     <script>
@@ -241,8 +316,86 @@
         tg.ready();
         tg.expand();
 
-        function assistir() {
-            tg.sendData('assistir');
+        // Pegar parâmetro do filme em destaque (se houver)
+        const urlParams = new URLSearchParams(window.location.search);
+        const filmeDestaque = urlParams.get('filme');
+
+        // Carregar catálogo
+        fetch('catalogo.json')
+            .then(response => response.json())
+            .then(data => renderCatalogo(data.filmes))
+            .catch(error => {
+                console.error('Erro ao carregar catálogo:', error);
+                document.getElementById('catalogo-container').innerHTML =
+                    '<div class="empty"><p>Erro ao carregar catálogo.<br>Tente novamente mais tarde.</p></div>';
+            });
+
+        function renderCatalogo(filmes) {
+            const container = document.getElementById('catalogo-container');
+
+            if (!filmes || filmes.length === 0) {
+                container.innerHTML = '<div class="empty"><p>Nenhum filme disponível no momento.<br>Volte em breve para novidades!</p></div>';
+                return;
+            }
+
+            let html = '';
+
+            // Se houver filme em destaque via URL, priorizar ele
+            let filmePrincipal = null;
+            if (filmeDestaque) {
+                filmePrincipal = filmes.find(f => f.slug === filmeDestaque);
+            }
+            // Senão, pegar o marcado como principal
+            if (!filmePrincipal) {
+                filmePrincipal = filmes.find(f => f.principal);
+            }
+            // Senão, pegar o primeiro
+            if (!filmePrincipal && filmes.length > 0) {
+                filmePrincipal = filmes[0];
+            }
+
+            // Renderizar filme principal
+            if (filmePrincipal) {
+                html += `
+                    <div class="filme-destaque">
+                        <img class="poster" src="${filmePrincipal.poster}" alt="${filmePrincipal.nome}">
+                        <h2>${filmePrincipal.nome}</h2>
+                        <p>${filmePrincipal.descricao}</p>
+                        <button class="btn" onclick="assistirFilme('${filmePrincipal.slug}')">
+                            🎬 Assistir Agora Grátis
+                        </button>
+                    </div>
+                `;
+            }
+
+            // Renderizar outros filmes (se houver mais de 1)
+            const outrosFilmes = filmes.filter(f => f.slug !== filmePrincipal?.slug);
+
+            if (outrosFilmes.length > 0) {
+                html += '<div class="section-title">Mais Filmes Disponíveis</div>';
+                html += '<div class="filmes-grid">';
+
+                outrosFilmes.forEach(filme => {
+                    html += `
+                        <div class="filme-card" onclick="assistirFilme('${filme.slug}')">
+                            <img class="poster" src="${filme.poster}" alt="${filme.nome}">
+                            <div class="info">
+                                <h3>${filme.nome}</h3>
+                                <p>${filme.descricao}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += '</div>';
+            }
+
+            container.innerHTML = html;
+        }
+
+        function assistirFilme(slug) {
+            // Enviar slug do filme para o bot
+            tg.sendData(slug);
         }
     </script>
 </body>

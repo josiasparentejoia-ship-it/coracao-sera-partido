@@ -1,0 +1,36 @@
+<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fundo gradient -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9333ea;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f472b6;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fce7f3;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fundo -->
+  <rect width="400" height="200" fill="url(#bgGrad)" rx="20"/>
+
+  <!-- Ícone de coração/filme -->
+  <g transform="translate(200, 60)">
+    <!-- Coração -->
+    <path d="M0,10 C0,-5 -30,-10 -30,10 C-30,25 0,35 0,40 C0,35 30,25 30,10 C30,-10 0,-5 0,10 Z"
+          fill="#ffffff" opacity="0.9"/>
+    <!-- Detalhe de filme -->
+    <circle cx="-8" cy="10" r="3" fill="#ec4899"/>
+    <circle cx="8" cy="10" r="3" fill="#ec4899"/>
+  </g>
+
+  <!-- Texto IloveDramax -->
+  <text x="200" y="130" font-family="Arial, sans-serif" font-size="42" font-weight="bold"
+        fill="url(#textGrad)" text-anchor="middle">IloveDramax</text>
+
+  <!-- Subtítulo -->
+  <text x="200" y="160" font-family="Arial, sans-serif" font-size="16"
+        fill="#ffffff" opacity="0.8" text-anchor="middle">Seu catálogo de filmes românticos</text>
+</svg>
