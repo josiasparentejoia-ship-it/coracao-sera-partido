@@ -99,19 +99,35 @@
             border-radius: 2px;
         }
 
-        /* ── FILME PRINCIPAL ── */
-        .filme-destaque {
+        /* ── CARROSSEL DE FILMES ── */
+        .carousel-container {
+            position: relative;
+            margin-bottom: 30px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .carousel-slide {
+            display: none;
             background: linear-gradient(135deg, rgba(244,114,182,0.15), rgba(192,132,252,0.15));
             border: 2px solid rgba(244, 114, 182, 0.4);
             border-radius: 20px;
             padding: 20px;
-            margin-bottom: 30px;
             position: relative;
-            overflow: hidden;
+            animation: fadeIn 1s ease-in-out;
         }
 
-        .filme-destaque::before {
-            content: "⭐ EM DESTAQUE";
+        .carousel-slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .carousel-slide::before {
+            content: "🔥 NOVIDADES";
             position: absolute;
             top: 12px;
             right: 12px;
@@ -124,24 +140,49 @@
             z-index: 2;
         }
 
-        .filme-destaque .poster {
+        .carousel-slide .poster {
             width: 100%;
+            max-height: 500px;
+            object-fit: contain;
             border-radius: 16px;
             margin-bottom: 16px;
+            background: rgba(0, 0, 0, 0.3);
             box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3);
         }
 
-        .filme-destaque h2 {
+        .carousel-slide h2 {
             font-size: 24px;
             margin-bottom: 12px;
             color: #f472b6;
         }
 
-        .filme-destaque p {
+        .carousel-slide p {
             font-size: 15px;
             color: #e9d5ff;
             line-height: 1.6;
             margin-bottom: 18px;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .carousel-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(244, 114, 182, 0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .carousel-indicator.active {
+            width: 24px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, #f472b6, #ec4899);
         }
 
         /* ── GRID DE FILMES ── */
@@ -175,7 +216,8 @@
         .filme-card .poster {
             width: 100%;
             aspect-ratio: 2/3;
-            object-fit: cover;
+            object-fit: contain;
+            background: rgba(0, 0, 0, 0.3);
             display: block;
         }
 
@@ -330,6 +372,9 @@
                     '<div class="empty"><p>Erro ao carregar catálogo.<br>Tente novamente mais tarde.</p></div>';
             });
 
+        let currentSlide = 0;
+        let carouselInterval = null;
+
         function renderCatalogo(filmes) {
             const container = document.getElementById('catalogo-container');
 
@@ -340,42 +385,55 @@
 
             let html = '';
 
-            // Se houver filme em destaque via URL, priorizar ele
-            let filmePrincipal = null;
-            if (filmeDestaque) {
-                filmePrincipal = filmes.find(f => f.slug === filmeDestaque);
-            }
-            // Senão, pegar o marcado como principal
-            if (!filmePrincipal) {
-                filmePrincipal = filmes.find(f => f.principal);
-            }
-            // Senão, pegar o primeiro
-            if (!filmePrincipal && filmes.length > 0) {
-                filmePrincipal = filmes[0];
+            // Ordenar filmes por ID (mais recentes primeiro, assumindo que IDs maiores = mais recentes)
+            const filmesOrdenados = [...filmes].sort((a, b) => b.id - a.id);
+
+            // Pegar os 5 filmes mais recentes para o carrossel
+            const filmesCarrossel = filmesOrdenados.slice(0, 5);
+            const filmesRestantes = filmesOrdenados.slice(5);
+
+            // Renderizar carrossel com os 5 filmes mais recentes
+            if (filmesCarrossel.length > 0) {
+                html += '<div class="carousel-container">';
+
+                filmesCarrossel.forEach((filme, index) => {
+                    html += `
+                        <div class="carousel-slide ${index === 0 ? 'active' : ''}" id="slide-${index}">
+                            <img class="poster" src="${filme.poster}" alt="${filme.nome}">
+                            <h2>${filme.nome}</h2>
+                            <p>${filme.descricao}</p>
+                            <button class="btn" onclick="assistirFilme('${filme.slug}')">
+                                🎬 Assistir Agora Grátis
+                            </button>
+                        </div>
+                    `;
+                });
+
+                // Indicadores do carrossel
+                if (filmesCarrossel.length > 1) {
+                    html += '<div class="carousel-indicators">';
+                    filmesCarrossel.forEach((_, index) => {
+                        html += `<div class="carousel-indicator ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>`;
+                    });
+                    html += '</div>';
+                }
+
+                html += '</div>';
+
+                // Iniciar rotação automática após renderizar
+                setTimeout(() => {
+                    if (filmesCarrossel.length > 1) {
+                        startCarousel(filmesCarrossel.length);
+                    }
+                }, 100);
             }
 
-            // Renderizar filme principal
-            if (filmePrincipal) {
-                html += `
-                    <div class="filme-destaque">
-                        <img class="poster" src="${filmePrincipal.poster}" alt="${filmePrincipal.nome}">
-                        <h2>${filmePrincipal.nome}</h2>
-                        <p>${filmePrincipal.descricao}</p>
-                        <button class="btn" onclick="assistirFilme('${filmePrincipal.slug}')">
-                            🎬 Assistir Agora Grátis
-                        </button>
-                    </div>
-                `;
-            }
-
-            // Renderizar outros filmes (se houver mais de 1)
-            const outrosFilmes = filmes.filter(f => f.slug !== filmePrincipal?.slug);
-
-            if (outrosFilmes.length > 0) {
+            // Renderizar filmes restantes em grade
+            if (filmesRestantes.length > 0) {
                 html += '<div class="section-title">Mais Filmes Disponíveis</div>';
                 html += '<div class="filmes-grid">';
 
-                outrosFilmes.forEach(filme => {
+                filmesRestantes.forEach(filme => {
                     html += `
                         <div class="filme-card" onclick="assistirFilme('${filme.slug}')">
                             <img class="poster" src="${filme.poster}" alt="${filme.nome}">
@@ -391,6 +449,52 @@
             }
 
             container.innerHTML = html;
+        }
+
+        function startCarousel(totalSlides) {
+            // Limpar intervalo anterior se existir
+            if (carouselInterval) {
+                clearInterval(carouselInterval);
+            }
+
+            // Trocar slide a cada 5 segundos
+            carouselInterval = setInterval(() => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateCarousel();
+            }, 5000);
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+
+            // Reiniciar intervalo
+            const slides = document.querySelectorAll('.carousel-slide');
+            if (carouselInterval) {
+                clearInterval(carouselInterval);
+            }
+            startCarousel(slides.length);
+        }
+
+        function updateCarousel() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const indicators = document.querySelectorAll('.carousel-indicator');
+
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            indicators.forEach((indicator, index) => {
+                if (index === currentSlide) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
         }
 
         function assistirFilme(slug) {
