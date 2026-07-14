@@ -105,16 +105,15 @@
             margin-bottom: 30px;
             border-radius: 20px;
             overflow: hidden;
+            background: linear-gradient(135deg, rgba(244,114,182,0.15), rgba(192,132,252,0.15));
+            border: 2px solid rgba(244, 114, 182, 0.4);
         }
 
         .carousel-slide {
             display: none;
-            background: linear-gradient(135deg, rgba(244,114,182,0.15), rgba(192,132,252,0.15));
-            border: 2px solid rgba(244, 114, 182, 0.4);
-            border-radius: 20px;
-            padding: 20px;
             position: relative;
-            animation: fadeIn 1s ease-in-out;
+            cursor: pointer;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         .carousel-slide.active {
@@ -126,48 +125,24 @@
             to { opacity: 1; }
         }
 
-        .carousel-slide::before {
-            content: "🔥 NOVIDADES";
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: linear-gradient(135deg, #f472b6, #ec4899);
-            padding: 6px 14px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            z-index: 2;
-        }
-
         .carousel-slide .poster {
             width: 100%;
-            max-height: 500px;
+            height: 400px;
             object-fit: contain;
-            border-radius: 16px;
-            margin-bottom: 16px;
             background: rgba(0, 0, 0, 0.3);
-            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3);
+            display: block;
         }
 
-        .carousel-slide h2 {
-            font-size: 24px;
-            margin-bottom: 12px;
-            color: #f472b6;
-        }
-
-        .carousel-slide p {
-            font-size: 15px;
-            color: #e9d5ff;
-            line-height: 1.6;
-            margin-bottom: 18px;
+        .carousel-slide:hover .poster {
+            opacity: 0.9;
         }
 
         .carousel-indicators {
             display: flex;
             justify-content: center;
             gap: 8px;
-            margin-top: 16px;
+            padding: 12px 0;
+            background: rgba(0, 0, 0, 0.2);
         }
 
         .carousel-indicator {
@@ -185,10 +160,10 @@
             background: linear-gradient(135deg, #f472b6, #ec4899);
         }
 
-        /* ── GRID DE FILMES ── */
+        /* ── GRID DE FILMES (2 COLUNAS) ── */
         .filmes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 16px;
             margin-bottom: 20px;
         }
@@ -215,7 +190,7 @@
 
         .filme-card .poster {
             width: 100%;
-            aspect-ratio: 2/3;
+            height: 400px;
             object-fit: contain;
             background: rgba(0, 0, 0, 0.3);
             display: block;
@@ -229,20 +204,116 @@
             font-size: 15px;
             font-weight: 600;
             color: #fff;
-            margin-bottom: 6px;
+            text-align: center;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .filme-card .info p {
-            font-size: 12px;
+        /* ── PAGINAÇÃO ── */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+            padding: 20px;
+        }
+
+        .pagination button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #9333ea, #ec4899);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+        }
+
+        .pagination button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(236, 72, 153, 0.4);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
             color: #c084fc;
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* ── TELA DE DETALHES DO FILME ── */
+        .filme-detalhes {
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .filme-detalhes.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .detalhes-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            cursor: pointer;
+            color: #f472b6;
+            font-weight: 600;
+        }
+
+        .detalhes-header:hover {
+            color: #ec4899;
+        }
+
+        .detalhes-poster {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3);
+        }
+
+        .detalhes-titulo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #f472b6;
+            margin-bottom: 16px;
+        }
+
+        .detalhes-descricao {
+            font-size: 16px;
+            color: #e9d5ff;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .catalogo-view {
+            display: block;
+        }
+
+        .catalogo-view.hidden {
+            display: none;
         }
 
         /* ── BOTÃO ── */
@@ -374,6 +445,9 @@
 
         let currentSlide = 0;
         let carouselInterval = null;
+        let todosFilmes = [];
+        let paginaAtual = 1;
+        const filmesPorPagina = 12; // 2 colunas x 6 linhas
 
         function renderCatalogo(filmes) {
             const container = document.getElementById('catalogo-container');
@@ -383,28 +457,22 @@
                 return;
             }
 
-            let html = '';
+            // Salvar todos os filmes
+            todosFilmes = [...filmes].sort((a, b) => b.id - a.id);
 
-            // Ordenar filmes por ID (mais recentes primeiro, assumindo que IDs maiores = mais recentes)
-            const filmesOrdenados = [...filmes].sort((a, b) => b.id - a.id);
+            let html = '<div class="catalogo-view" id="catalogo-view">';
 
             // Pegar os 5 filmes mais recentes para o carrossel
-            const filmesCarrossel = filmesOrdenados.slice(0, 5);
-            const filmesRestantes = filmesOrdenados.slice(5);
+            const filmesCarrossel = todosFilmes.slice(0, 5);
 
-            // Renderizar carrossel com os 5 filmes mais recentes
+            // Renderizar carrossel
             if (filmesCarrossel.length > 0) {
                 html += '<div class="carousel-container">';
 
                 filmesCarrossel.forEach((filme, index) => {
                     html += `
-                        <div class="carousel-slide ${index === 0 ? 'active' : ''}" id="slide-${index}">
+                        <div class="carousel-slide ${index === 0 ? 'active' : ''}" onclick="abrirDetalhes('${filme.slug}')">
                             <img class="poster" src="${filme.poster}" alt="${filme.nome}">
-                            <h2>${filme.nome}</h2>
-                            <p>${filme.descricao}</p>
-                            <button class="btn" onclick="assistirFilme('${filme.slug}')">
-                                🎬 Assistir Agora Grátis
-                            </button>
                         </div>
                     `;
                 });
@@ -413,62 +481,115 @@
                 if (filmesCarrossel.length > 1) {
                     html += '<div class="carousel-indicators">';
                     filmesCarrossel.forEach((_, index) => {
-                        html += `<div class="carousel-indicator ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>`;
+                        html += `<div class="carousel-indicator ${index === 0 ? 'active' : ''}" onclick="event.stopPropagation(); goToSlide(${index})"></div>`;
                     });
                     html += '</div>';
                 }
 
                 html += '</div>';
-
-                // Iniciar rotação automática após renderizar
-                setTimeout(() => {
-                    if (filmesCarrossel.length > 1) {
-                        startCarousel(filmesCarrossel.length);
-                    }
-                }, 100);
             }
 
-            // Renderizar filmes restantes em grade
-            if (filmesRestantes.length > 0) {
-                html += '<div class="section-title">Mais Filmes Disponíveis</div>';
-                html += '<div class="filmes-grid">';
+            // Renderizar grade de filmes com paginação
+            html += '<div class="section-title">Catálogo Completo</div>';
+            html += '<div id="filmes-grid-container"></div>';
+            html += '</div>';
 
-                filmesRestantes.forEach(filme => {
-                    html += `
-                        <div class="filme-card" onclick="assistirFilme('${filme.slug}')">
-                            <img class="poster" src="${filme.poster}" alt="${filme.nome}">
-                            <div class="info">
-                                <h3>${filme.nome}</h3>
-                                <p>${filme.descricao}</p>
-                            </div>
+            // Tela de detalhes (inicialmente oculta)
+            html += '<div class="filme-detalhes" id="filme-detalhes"></div>';
+
+            container.innerHTML = html;
+
+            // Renderizar primeira página
+            renderPagina(1);
+
+            // Iniciar carrossel
+            if (filmesCarrossel.length > 1) {
+                setTimeout(() => startCarousel(filmesCarrossel.length), 100);
+            }
+        }
+
+        function renderPagina(pagina) {
+            paginaAtual = pagina;
+            const inicio = (pagina - 1) * filmesPorPagina;
+            const fim = inicio + filmesPorPagina;
+            const filmesPagina = todosFilmes.slice(inicio, fim);
+            const totalPaginas = Math.ceil(todosFilmes.length / filmesPorPagina);
+
+            let html = '<div class="filmes-grid">';
+
+            filmesPagina.forEach(filme => {
+                html += `
+                    <div class="filme-card" onclick="abrirDetalhes('${filme.slug}')">
+                        <img class="poster" src="${filme.poster}" alt="${filme.nome}">
+                        <div class="info">
+                            <h3>${filme.nome}</h3>
                         </div>
-                    `;
-                });
+                    </div>
+                `;
+            });
 
+            html += '</div>';
+
+            // Adicionar paginação se houver mais de uma página
+            if (totalPaginas > 1) {
+                html += '<div class="pagination">';
+                html += `<button onclick="renderPagina(${pagina - 1})" ${pagina === 1 ? 'disabled' : ''}>◀ Anterior</button>`;
+                html += `<span class="page-info">Página ${pagina} de ${totalPaginas}</span>`;
+                html += `<button onclick="renderPagina(${pagina + 1})" ${pagina === totalPaginas ? 'disabled' : ''}>Próxima ▶</button>`;
                 html += '</div>';
             }
 
-            container.innerHTML = html;
+            document.getElementById('filmes-grid-container').innerHTML = html;
+        }
+
+        function abrirDetalhes(slug) {
+            const filme = todosFilmes.find(f => f.slug === slug);
+            if (!filme) return;
+
+            // Esconder catálogo
+            document.getElementById('catalogo-view').classList.add('hidden');
+
+            // Mostrar detalhes
+            const detalhesDiv = document.getElementById('filme-detalhes');
+            detalhesDiv.innerHTML = `
+                <div class="detalhes-header" onclick="voltarCatalogo()">
+                    ◀ Voltar ao Catálogo
+                </div>
+                <img class="detalhes-poster" src="${filme.poster}" alt="${filme.nome}">
+                <h2 class="detalhes-titulo">${filme.nome}</h2>
+                <p class="detalhes-descricao">${filme.descricao}</p>
+                <button class="btn" onclick="assistirFilme('${filme.slug}')">
+                    🎬 Assistir Filme Grátis
+                </button>
+            `;
+            detalhesDiv.classList.add('active');
+
+            // Rolar para o topo
+            window.scrollTo(0, 0);
+        }
+
+        function voltarCatalogo() {
+            document.getElementById('catalogo-view').classList.remove('hidden');
+            document.getElementById('filme-detalhes').classList.remove('active');
+            window.scrollTo(0, 0);
         }
 
         function startCarousel(totalSlides) {
-            // Limpar intervalo anterior se existir
             if (carouselInterval) {
                 clearInterval(carouselInterval);
             }
 
-            // Trocar slide a cada 5 segundos
+            // Trocar slide a cada 4 segundos
             carouselInterval = setInterval(() => {
                 currentSlide = (currentSlide + 1) % totalSlides;
                 updateCarousel();
-            }, 5000);
+            }, 4000);
         }
 
         function goToSlide(index) {
             currentSlide = index;
             updateCarousel();
 
-            // Reiniciar intervalo
             const slides = document.querySelectorAll('.carousel-slide');
             if (carouselInterval) {
                 clearInterval(carouselInterval);
