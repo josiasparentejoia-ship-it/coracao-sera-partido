@@ -652,25 +652,80 @@ async def cb_admin_painel_canal(update: Update, context: ContextTypes.DEFAULT_TY
         return
     await q.answer()
 
-    context.user_data["admin_modo"] = "painel_canal"
+    # Listar canais disponíveis (dos filmes cadastrados)
+    filmes = listar_filmes_ativos()
+
+    if not filmes:
+        await q.message.reply_text("❌ Nenhum canal disponível. Adicione filmes primeiro!")
+        return
+
+    # Criar botões para cada canal
+    botoes = []
+    for filme_data in filmes:
+        filme_id, nome, slug, descricao, poster_path, video_path, canal_id, principal = filme_data
+        botoes.append([InlineKeyboardButton(
+            f"📺 {nome}",
+            callback_data=f"painel_canal_{canal_id}"
+        )])
+
+    botoes.append([InlineKeyboardButton("◀️ Voltar", callback_data="admin_menu")])
 
     await _abrir_menu(
         context, q.message.chat_id,
         "📌 *Publicar Mensagem com Botões no Canal*\n\n"
-        "Envie o texto da mensagem. Se quiser botões, adicione uma linha `BOTOES:` seguida de "
-        "uma linha por botão no formato `Nome do Botão | https://link.com`.\n\n"
-        "Para um botão que leva direto para o fluxo de contribuição (com mensagem de "
-        "agradecimento sobre a dublagem), use `APOIAR` no lugar do link.\n\n"
-        "*Exemplo:*\n"
-        "```\n"
-        "❤️ Bem-vindo ao canal oficial!\n\n"
-        "BOTOES:\n"
-        "❤️ Apoiar a Dublagem | APOIAR\n"
-        "💬 Suporte | https://t.me/DrBuscaOfc\n"
-        "🎵 TikTok | https://www.tiktok.com/@ilovedoramaxx\n"
-        "```\n\n"
-        "Essa mensagem ficará sempre fixada como a última do canal: toda vez que alguém postar "
-        "algo novo, o bot apaga essa mensagem e a reenvia no final."
+        "Escolha o canal onde deseja publicar:",
+        InlineKeyboardMarkup(botoes)
+    )
+
+
+async def cb_painel_canal_escolhido(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    q = update.callback_query
+    if update.effective_user.id != ADMIN_ID:
+        await q.answer("Sem permissão.", show_alert=True)
+        return
+    await q.answer()
+
+    # Extrair canal_id do callback_data
+    canal_id = int(q.data.split("_")[-1])
+
+    # Buscar informações do filme/canal
+    filmes = listar_filmes_ativos()
+    filme_info = None
+    for filme_data in filmes:
+        if filme_data[6] == canal_id:  # filme_data[6] é o canal_id
+            filme_info = {
+                'id': filme_data[0],
+                'nome': filme_data[1],
+                'slug': filme_data[2],
+                'canal_id': filme_data[6]
+            }
+            break
+
+    if not filme_info:
+        await q.message.reply_text("❌ Canal não encontrado!")
+        return
+
+    # Salvar informações do canal escolhido
+    context.user_data["admin_modo"] = "painel_canal_mensagem"
+    context.user_data["canal_escolhido"] = filme_info
+
+    await _abrir_menu(
+        context, q.message.chat_id,
+        f"📌 *Publicar em: {filme_info['nome']}*\n\n"
+        f"Envie a mensagem no seguinte formato:\n\n"
+        f"*Exemplo:*\n"
+        f"```\n"
+        f"❤️ Bem-vindo ao canal oficial!\n"
+        f"Assista ao filme completo em 4K!\n\n"
+        f"BOTAO_GATEWAY: 🎬 Explorar Catálogo\n"
+        f"LINK_FILME: https://t.me/c/1234567890/123\n"
+        f"```\n\n"
+        f"*Explicação:*\n"
+        f"• Texto da mensagem (linhas normais)\n"
+        f"• `BOTAO_GATEWAY:` texto do botão que abre o catálogo\n"
+        f"• `LINK_FILME:` link da postagem do filme no canal\n\n"
+        f"Os botões de Suporte e TikTok são adicionados automaticamente!",
+        parse_mode="Markdown"
     )
 
 
@@ -1337,27 +1392,74 @@ async def handler_texto(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(f"❌ Erro ao gerar link: {e}")
         return
 
-    # Admin publicando painel de botões no canal
-    if user_id == ADMIN_ID and context.user_data.get("admin_modo") == "painel_canal":
+    # Admin publicando painel de botões no canal (novo formato com canal escolhido)
+    if user_id == ADMIN_ID and context.user_data.get("admin_modo") == "painel_canal_mensagem":
         context.user_data.pop("admin_modo", None)
-        texto, botoes = _parse_painel(update.message.text)
+        canal_info = context.user_data.get("canal_escolhido")
+
+        if not canal_info:
+            await update.message.reply_text("❌ Erro: nenhum canal escolhido!")
+            return
+
+        # Parse da mensagem
+        mensagem_completa = update.message.text.strip()
+        linhas = mensagem_completa.split('\n')
+
+        # Extrair informações
+        texto_mensagem = []
+        botao_gateway_texto = None
+        link_filme = None
+
+        for linha in linhas:
+            if linha.startswith("BOTAO_GATEWAY:"):
+                botao_gateway_texto = linha.replace("BOTAO_GATEWAY:", "").strip()
+            elif linha.startswith("LINK_FILME:"):
+                link_filme = linha.replace("LINK_FILME:", "").strip()
+            elif not linha.startswith("BOTAO_") and not linha.startswith("LINK_"):
+                texto_mensagem.append(linha)
+
+        texto_final = "\n".join(texto_mensagem).strip()
+
+        # Validações
+        if not botao_gateway_texto:
+            await update.message.reply_text("❌ Você precisa definir o texto do botão gateway!\nUse: `BOTAO_GATEWAY: Seu texto aqui`", parse_mode="Markdown")
+            return
+
+        if not link_filme:
+            await update.message.reply_text("❌ Você precisa definir o link do filme!\nUse: `LINK_FILME: https://t.me/...`", parse_mode="Markdown")
+            return
+
+        # Criar botões
         bot_username = (await context.bot.get_me()).username
-        kb = _kb_from_botoes(botoes, bot_username)
+        mini_app_url = f"https://t.me/{bot_username}/catalogo"
 
-        antigo = get_painel_canal()
-        if antigo and antigo.get("message_id"):
-            try:
-                await context.bot.delete_message(CHANNEL_ID, antigo["message_id"])
-            except Exception:
-                pass
+        keyboard = [
+            [InlineKeyboardButton(botao_gateway_texto, web_app=WebAppInfo(url=mini_app_url))],
+            [InlineKeyboardButton(f"🎬 {canal_info['nome']}", url=link_filme)],
+            [InlineKeyboardButton("💬 Suporte", url="https://t.me/DrBuscaOfc")],
+            [InlineKeyboardButton("🎵 TikTok", url="https://www.tiktok.com/@ilovedoramaxx")]
+        ]
 
+        kb = InlineKeyboardMarkup(keyboard)
+
+        # Publicar no canal
         try:
-            m = await context.bot.send_message(CHANNEL_ID, texto, parse_mode="Markdown", reply_markup=kb)
-            set_painel_canal(m.message_id, texto, json.dumps(botoes))
-            await update.message.reply_text("✅ Mensagem publicada no canal!")
+            m = await context.bot.send_message(
+                canal_info['canal_id'],
+                texto_final,
+                parse_mode="Markdown",
+                reply_markup=kb
+            )
+            await update.message.reply_text(
+                f"✅ Mensagem publicada no canal *{canal_info['nome']}*!\n\n"
+                f"ID da mensagem: `{m.message_id}`",
+                parse_mode="Markdown"
+            )
         except Exception as e:
             logger.error(f"Erro ao publicar painel no canal: {e}")
             await update.message.reply_text(f"❌ Erro ao publicar no canal: {e}")
+
+        context.user_data.pop("canal_escolhido", None)
         return
 
     # Admin publicando conteúdo no canal para gerar link direto
@@ -1775,6 +1877,7 @@ def main():
     app.add_handler(CallbackQueryHandler(cb_admin_menu,              pattern="^admin_menu$"))
     app.add_handler(CallbackQueryHandler(cb_admin_editar_progresso,  pattern="^admin_editar_progresso$"))
     app.add_handler(CallbackQueryHandler(cb_admin_painel_canal,      pattern="^admin_painel_canal$"))
+    app.add_handler(CallbackQueryHandler(cb_painel_canal_escolhido,  pattern="^painel_canal_"))
     app.add_handler(CallbackQueryHandler(cb_admin_enviar_canal,      pattern="^admin_enviar_canal$"))
     app.add_handler(CallbackQueryHandler(cb_admin_gerar_link,        pattern="^admin_gerar_link$"))
     app.add_handler(CallbackQueryHandler(cb_gerar_link_simples,      pattern="^gerar_link_simples$"))
