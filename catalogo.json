@@ -1,13 +1,22 @@
 {
   "filmes": [
     {
+      "id": 2,
+      "nome": "Uma Ideia de Você, 2024 (Dublado)",
+      "slug": "uma_ideia_de_voc_2024_dublado",
+      "descricao": "✨ Uma Ideia de Você é um romance emocionante que prova que o amor pode surgir nos momentos mais inesperados. Entre paixão, desafios e escolhas difíceis, o filme entrega uma história envolvente que conquista do início ao fim e faz acreditar que nunca é tarde para viver um grande amor. 💖",
+      "poster": "uma_ideia_de_voc_2024_dublado_poster.jpg",
+      "video": "",
+      "principal": true
+    },
+    {
       "id": 1,
       "nome": "Seu Coracao Sera Partido",
       "slug": "coracao_sera_partido",
       "descricao": "Um drama romantico russo emocionante sobre amor, bullying e superacao.",
       "poster": "poster.png",
       "video": "filme_legendado_parte1_10min.mp4",
-      "principal": true
+      "principal": false
     }
   ]
 }
