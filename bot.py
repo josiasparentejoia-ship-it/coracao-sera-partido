@@ -709,24 +709,44 @@ async def cb_painel_canal_escolhido(update: Update, context: ContextTypes.DEFAUL
     context.user_data["admin_modo"] = "painel_canal_mensagem"
     context.user_data["canal_escolhido"] = filme_info
 
-    await _abrir_menu(
-        context, q.message.chat_id,
-        f"📌 *Publicar em: {filme_info['nome']}*\n\n"
-        f"Envie a mensagem no seguinte formato:\n\n"
-        f"*Exemplo:*\n"
-        f"```\n"
-        f"❤️ Bem-vindo ao canal oficial!\n"
-        f"Assista ao filme completo em 4K!\n\n"
-        f"BOTAO_GATEWAY: 🎬 Explorar Catálogo\n"
-        f"LINK_FILME: https://t.me/c/1234567890/123\n"
-        f"```\n\n"
-        f"*Explicação:*\n"
-        f"• Texto da mensagem (linhas normais)\n"
-        f"• `BOTAO_GATEWAY:` texto do botão que abre o catálogo\n"
-        f"• `LINK_FILME:` link da postagem do filme no canal\n\n"
-        f"Os botões de Suporte e TikTok são adicionados automaticamente!",
-        parse_mode="Markdown"
-    )
+    # Editar a mensagem existente ao invés de criar nova
+    try:
+        await q.message.edit_text(
+            f"📌 *Publicar em: {filme_info['nome']}*\n\n"
+            f"Envie a mensagem no seguinte formato:\n\n"
+            f"*Exemplo:*\n"
+            f"```\n"
+            f"❤️ Bem-vindo ao canal oficial!\n"
+            f"Assista ao filme completo em 4K!\n\n"
+            f"BOTAO_GATEWAY: 🎬 Explorar Catálogo\n"
+            f"LINK_FILME: https://t.me/c/1234567890/123\n"
+            f"```\n\n"
+            f"*Explicação:*\n"
+            f"• Texto da mensagem (linhas normais)\n"
+            f"• `BOTAO_GATEWAY:` texto do botão que abre o catálogo\n"
+            f"• `LINK_FILME:` link da postagem do filme no canal\n\n"
+            f"Os botões de Suporte e TikTok são adicionados automaticamente!",
+            parse_mode="Markdown"
+        )
+    except Exception as e:
+        logger.error(f"Erro ao editar mensagem: {e}")
+        await q.message.reply_text(
+            f"📌 *Publicar em: {filme_info['nome']}*\n\n"
+            f"Envie a mensagem no seguinte formato:\n\n"
+            f"*Exemplo:*\n"
+            f"```\n"
+            f"❤️ Bem-vindo ao canal oficial!\n"
+            f"Assista ao filme completo em 4K!\n\n"
+            f"BOTAO_GATEWAY: 🎬 Explorar Catálogo\n"
+            f"LINK_FILME: https://t.me/c/1234567890/123\n"
+            f"```\n\n"
+            f"*Explicação:*\n"
+            f"• Texto da mensagem (linhas normais)\n"
+            f"• `BOTAO_GATEWAY:` texto do botão que abre o catálogo\n"
+            f"• `LINK_FILME:` link da postagem do filme no canal\n\n"
+            f"Os botões de Suporte e TikTok são adicionados automaticamente!",
+            parse_mode="Markdown"
+        )
 
 
 async def cb_admin_enviar_canal(update: Update, context: ContextTypes.DEFAULT_TYPE):
